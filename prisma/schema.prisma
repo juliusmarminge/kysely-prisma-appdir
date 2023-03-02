@@ -1,0 +1,107 @@
+generator kysely {
+  provider = "npx prisma-generator-kysely"
+  output   = "./types"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Possesion {
+  id          Int    @id @default(autoincrement())
+  stock       String
+  amount      Int
+  possessedBy User   @relation(fields: [userId], references: [id])
+  userId      String
+
+  @@index([userId])
+}
+
+model Transaction {
+  id           String          @id @default(cuid())
+  transactedAt DateTime        @default(now())
+  units        Int
+  pricePerUnit Float
+  type         TransactionType
+  transactedBy User            @relation(fields: [userId], references: [id])
+  userId       String
+  stock        String
+
+  @@index([userId])
+}
+
+enum TransactionType {
+  BUY
+  SELL
+}
+
+model StockHistory {
+  id      Int      @id @default(autoincrement())
+  stock   String
+  date    DateTime
+  open    Float
+  close   Float
+  high    Float
+  average Float
+  low     Float
+  volume  Int
+
+  @@unique([stock, date])
+  @@index([stock, date])
+}
+
+//
+// NEXT AUTH
+//
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  refresh_token_expires_in Int?
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String?
+  email         String?       @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  possesions    Possesion[]
+  transactions  Transaction[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

@@ -1,0 +1,38 @@
+{
+  "name": "kysely-auth",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "generate": "prisma generate && tsx prisma/postgenerate.ts",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@planetscale/database": "^1.5.0",
+    "kysely": "^0.23.4",
+    "kysely-planetscale": "^1.3.0",
+    "nanoid": "^4.0.1",
+    "next": "^13.2.1",
+    "next-auth": "^4.20.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "zod": "^3.20.6"
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.21.1",
+    "@types/node": "^18.14.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
+    "prisma": "^4.11.0",
+    "prisma-generator-kysely": "^0.0.3",
+    "tailwindcss": "^3.2.7",
+    "tsx": "^3.12.3",
+    "typescript": "^4.9.5"
+  },
+  "ct3aMetadata": {
+    "initVersion": "7.5.9"
+  }
+}
